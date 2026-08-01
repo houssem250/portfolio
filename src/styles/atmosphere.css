@@ -1,0 +1,61 @@
+/* ========================================================================== */
+/* Atmospheric Background System — Keyframes & Utilities                      */
+/* ========================================================================== */
+
+/* ── Layer 1: Ambient Gradient Drift ─────────────────────────────────────── */
+/* A massive radial gradient slowly orbits behind the viewport.               */
+/* Uses only transform (translate + scale) — fully GPU-composited.            */
+
+@keyframes atmo-gradient-drift {
+  0% {
+    transform: translate(-20%, -10%) scale(1);
+  }
+  25% {
+    transform: translate(15%, -25%) scale(1.08);
+  }
+  50% {
+    transform: translate(10%, 15%) scale(0.95);
+  }
+  75% {
+    transform: translate(-25%, 10%) scale(1.05);
+  }
+  100% {
+    transform: translate(-20%, -10%) scale(1);
+  }
+}
+
+/* ── Layer 2: Particle Lifecycle (Real physics) ────────────────────────────── */
+/* Slow fade in, continuous drift to target, slow fade out.                   */
+/* Uses JS onAnimationEnd to respawn in a completely new location.            */
+
+@keyframes atmo-particle-float {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.5) rotate(0deg);
+  }
+  20% {
+    opacity: var(--atmo-p-opacity, 0.5);
+    transform: translate(calc(var(--atmo-p-drift-x) * 0.2), calc(var(--atmo-p-drift-y) * 0.2)) scale(1) rotate(30deg);
+  }
+  80% {
+    opacity: var(--atmo-p-opacity, 0.5);
+    transform: translate(calc(var(--atmo-p-drift-x) * 0.8), calc(var(--atmo-p-drift-y) * 0.8)) scale(1) rotate(120deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--atmo-p-drift-x), var(--atmo-p-drift-y)) scale(0.5) rotate(180deg);
+  }
+}
+
+/* ── Utility classes ─────────────────────────────────────────────────────── */
+
+.atmo-gradient {
+  animation: atmo-gradient-drift 70s ease-in-out infinite;
+  will-change: transform;
+}
+
+.atmo-particle-anim {
+  /* Runs exactly once (forwards) so onAnimationEnd fires to respawn it */
+  animation: atmo-particle-float var(--atmo-p-dur, 10s) ease-in-out var(--atmo-p-delay, 0s) forwards;
+  will-change: transform, opacity;
+}

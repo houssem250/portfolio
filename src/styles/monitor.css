@@ -1,0 +1,98 @@
+/* ========================================================================== */
+/* CRT Monitor Keyframes & CSS Effects                                        */
+/* ========================================================================== */
+
+/* ── Screen flicker (subtle brightness dip every ~5s) ─────────────────── */
+@keyframes screen-flicker {
+  0%, 94%, 96%, 98%, 100% { opacity: 1; }
+  95%  { opacity: 0.94; }
+  97%  { opacity: 0.98; }
+  99%  { opacity: 0.95; }
+}
+
+/* ── Sweeping scanline: crosses the screen height using top % ──────────── */
+/* The sweeping div is absolute inside overflow:hidden, so top:-10% → top:110%
+   guarantees it fully enters from above and exits below. */
+@keyframes scanline-sweep {
+  0%   { top: -10%; }
+  100% { top: 110%; }
+}
+
+/* ── Stars: strong three-phase pulse ++ then -- then ++ ───────────────── */
+/* Applied inline per star in PixelScene.tsx so each star gets its own
+   duration and delay. Three variants spread across stars for diversity. */
+@keyframes star-pulse-a {
+  0%   { opacity: 0;    }
+  15%  { opacity: 0.95; }   /* ++ rise  */
+  30%  { opacity: 1;    }   /* ++ peak  */
+  50%  { opacity: 0;    }   /* -- drop  */
+  70%  { opacity: 0.8;  }   /* ++ rise  */
+  85%  { opacity: 1;    }   /* ++ peak  */
+  100% { opacity: 0;    }   /* -- drop  */
+}
+
+@keyframes star-pulse-b {
+  0%   { opacity: 0.9;  }   /* ++ start */
+  20%  { opacity: 0;    }   /* -- drop  */
+  45%  { opacity: 1;    }   /* ++ peak  */
+  65%  { opacity: 0.7;  }   /* ++ hold  */
+  85%  { opacity: 0;    }   /* -- drop  */
+  100% { opacity: 0.9;  }   /* ++ rise  */
+}
+
+@keyframes star-pulse-c {
+  0%   { opacity: 0.5;  }   /* mid      */
+  25%  { opacity: 1;    }   /* ++ peak  */
+  45%  { opacity: 0;    }   /* -- drop  */
+  60%  { opacity: 0.6;  }   /* ++ rise  */
+  80%  { opacity: 1;    }   /* ++ peak  */
+  100% { opacity: 0.5;  }   /* mid      */
+}
+
+/* ── Moon brightness pulse ─────────────────────────────────────────────── */
+@keyframes moon-pulse {
+  0%, 100% { opacity: 1.0;   }
+  40%      { opacity: 0.95;  }
+  60%      { opacity: 0.97;  }
+}
+
+/* ── Celestial halo breathe ────────────────────────────────────────────── */
+@keyframes halo-breathe {
+  0%, 100% { opacity: 0.28; }
+  50%      { opacity: 0.45; }
+}
+
+/* ── Cloud drift ───────────────────────────────────────────────────────── */
+/* Clouds use SVG <animateTransform> inside PixelScene (true user-unit space).
+   No CSS keyframe needed here. */
+
+/* ── Rain: individual drops fall across the full viewBox height ────────── */
+/* Each drop starts just above y=0 (off-screen top) and falls to y=30 (bottom).
+   We animate via SVG <animateTransform> inside PixelScene for true SVG units. */
+
+/* ── Snow fall ─────────────────────────────────────────────────────────── */
+/* Same approach — animateTransform is used in the SVG. */
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* Utility classes                                                            */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+.animate-flicker {
+  animation: screen-flicker 5s ease-in-out infinite;
+}
+
+.animate-scanline {
+  animation: scanline-sweep 8s linear infinite;
+}
+
+.animate-moon-pulse {
+  animation: moon-pulse 4s ease-in-out infinite;
+}
+
+.animate-halo-breathe {
+  animation: halo-breathe 3.5s ease-in-out infinite;
+}
+
+
+/* ── Respect prefers-reduced-motion ───────────────────────────────────── */
+/* (Handled globally in globals.css — no need to repeat here)              */
